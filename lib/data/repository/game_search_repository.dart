@@ -12,7 +12,7 @@ class GameSearchRepository {
   static const String versionPath = '/v4';
   static const String path = '/games';
   static const String _query =
-      "fields name, genres.*, cover.*, screenshots.*; where name = *\"%s\"*; limit 20;";
+      "fields name, genres.*, cover.*, screenshots.*; where name = *\"%s\"*; limit 50;";
 
   final AuthRepository _authRepository;
   final String _clientId;
