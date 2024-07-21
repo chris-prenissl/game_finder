@@ -9,12 +9,15 @@ extension MapToGameEntity on Map<String, dynamic> {
       final String? coverImgUrl = this[_coverKey]?[_urlKey] as String?;
       final String? coverImgUrlFormatted = coverImgUrl?.getFormattedImageUrl();
       final screenShotUrls = getMappedListForKeys(_screenshotsKey, _urlKey);
+      final formattedScreenshotUrls = screenShotUrls
+          .map((url) => url.getFormattedImageUrl())
+          .toList();
       return Game(
         name: name,
         summary: summary,
         genres: genres,
         coverImgUrl: coverImgUrlFormatted,
-        screenShotUrls: screenShotUrls,
+        screenShotUrls: formattedScreenshotUrls,
       );
     } else {
       throw const FormatException(_formatExceptionText);
