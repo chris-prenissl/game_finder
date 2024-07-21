@@ -1,28 +1,16 @@
 import 'package:game_finder/data/dto/util.dart';
+import '../../domain/model/game.dart';
 
-class GameDto {
-  final String name;
-  final List<String> genres;
-  final String? coverImgUrl;
-  final List<String> screenShotUrls;
-
-  GameDto(
-      {required this.name,
-      required this.genres,
-      required this.coverImgUrl,
-      required this.screenShotUrls});
-
-  factory GameDto.fromJson(Map<String, dynamic> json) {
-    if (json
-        case {
-          _nameKey: String name,
-        }) {
-      final genres = json.getMappedListForKeys(_genresKey, _nameKey);
-      final String? coverImgUrl = json[_coverKey]?[_urlKey] as String?;
-      final screenShotUrls =
-          json.getMappedListForKeys(_screenshotsKey, _urlKey);
-      return GameDto(
+extension MapToGameEntity on Map<String, dynamic> {
+  Game toGameEntity() {
+    if (this case {_nameKey: String name}) {
+      final summary = this[_summaryKey];
+      final genres = getMappedListForKeys(_genresKey, _nameKey);
+      final String? coverImgUrl = this[_coverKey]?[_urlKey] as String?;
+      final screenShotUrls = getMappedListForKeys(_screenshotsKey, _urlKey);
+      return Game(
         name: name,
+        summary: summary,
         genres: genres,
         coverImgUrl: coverImgUrl,
         screenShotUrls: screenShotUrls,
@@ -33,6 +21,7 @@ class GameDto {
   }
 
   static const String _nameKey = 'name';
+  static const String _summaryKey = 'summary';
   static const String _genresKey = 'genres';
   static const String _coverKey = 'cover';
   static const String _urlKey = 'url';

@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/retry.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../../domain/model/game.dart';
+
 class GameSearchRepository {
   static const String igdbBaseUrl = 'api.igdb.com';
   static const String versionPath = '/v4';
@@ -22,7 +24,7 @@ class GameSearchRepository {
       : _authRepository = authRepository,
         _clientId = clientId;
 
-  Future<List<GameDto>> searchGames(String searchTerm) async {
+  Future<List<Game>> searchGames(String searchTerm) async {
     final token = await _authRepository.getOrRequestToken();
 
     final client = RetryClient(http.Client());
@@ -42,12 +44,13 @@ class GameSearchRepository {
       final searchResponse =
           await client.post(url, headers: headers, body: searchBody);
       final searchBodyUtf8 = utf8.decode(searchResponse.bodyBytes);
-      final decodedSearchResponse =
-          jsonDecode(searchBodyUtf8) as List;
+      final decodedSearchResponse = jsonDecode(searchBodyUtf8) as List;
+
       final games = decodedSearchResponse
-          .map((element) => GameDto.fromJson(element))
-          .nonNulls;
-      return games.toList();
+          .whereType<Map<String, dynamic>>()
+          .map((Map<String, dynamic> element) => element.toGameEntity())
+          .toList();
+      return games;
     } finally {
       client.close();
     }
