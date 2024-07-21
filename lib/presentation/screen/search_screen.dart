@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_finder/presentation/bloc/search/search_bloc.dart';
+import 'package:game_finder/presentation/component/game_list_card.dart';
+import 'package:game_finder/presentation/constants/numbers.dart';
 import 'package:game_finder/presentation/router.dart';
 import 'package:go_router/go_router.dart';
 
@@ -33,21 +35,27 @@ class SearchScreen extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: Strings.searchHint,
-                            labelText: Strings.searchLabelText,
-                            border: OutlineInputBorder(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(Numbers.standardPadding),
+                          child: TextField(
+                            decoration: const InputDecoration(
+                              hintText: Strings.searchHint,
+                              labelText: Strings.searchLabelText,
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (input) =>
+                                bloc.add(SearchEvent.inputChange(input)),
+                            onSubmitted: (_) =>
+                                bloc.add(const SearchEvent.search()),
                           ),
-                          onChanged: (input) =>
-                              bloc.add(SearchEvent.inputChange(input)),
-                          onSubmitted: (_) =>
-                              bloc.add(const SearchEvent.search()),
                         ),
                       ),
-                      FilledButton(
-                        onPressed: () => bloc.add(const SearchEvent.search()),
-                        child: const Text(Strings.searchButtonLabelText),
+                      Padding(
+                        padding: const EdgeInsets.all(Numbers.standardPadding),
+                        child: FilledButton(
+                          onPressed: () => bloc.add(const SearchEvent.search()),
+                          child: const Text(Strings.searchButtonLabelText),
+                        ),
                       )
                     ],
                   ),
@@ -56,18 +64,11 @@ class SearchScreen extends StatelessWidget {
                         itemCount: uiState.foundGames.length,
                         itemBuilder: (context, index) {
                           final game = uiState.foundGames[index];
-                      return GestureDetector(
-                        onTap: () => bloc.add(SearchEvent.selectGame(game)),
-                        child: Card(child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(game.name, style: const TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
-                            Text(game.genres.join(", "),)
-                          ],
-                        )),
-                      );
-                    }),
+                          return GestureDetector(
+                            onTap: () => bloc.add(SearchEvent.selectGame(game)),
+                            child: GameListCard(game),
+                          );
+                        }),
                   )
                 ],
               );

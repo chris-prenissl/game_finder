@@ -3,3 +3,9 @@ extension ListStringParsing on Map<String, dynamic> {
     return [...this[key]?.map((e) => e[mappedListKey].toString()).toList() ?? []];
   }
 }
+
+extension ImageUrlFormatter on String {
+  String getFormattedImageUrl() {
+    return "https:$this";
+  }
+}

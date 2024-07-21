@@ -7,12 +7,13 @@ extension MapToGameEntity on Map<String, dynamic> {
       final summary = this[_summaryKey];
       final genres = getMappedListForKeys(_genresKey, _nameKey);
       final String? coverImgUrl = this[_coverKey]?[_urlKey] as String?;
+      final String? coverImgUrlFormatted = coverImgUrl?.getFormattedImageUrl();
       final screenShotUrls = getMappedListForKeys(_screenshotsKey, _urlKey);
       return Game(
         name: name,
         summary: summary,
         genres: genres,
-        coverImgUrl: coverImgUrl,
+        coverImgUrl: coverImgUrlFormatted,
         screenShotUrls: screenShotUrls,
       );
     } else {
