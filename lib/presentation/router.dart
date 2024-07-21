@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_finder/presentation/screen/game_screen.dart';
 import 'package:game_finder/presentation/screen/search_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../domain/model/game.dart';
+import 'bloc/game/game_bloc.dart';
 
 final GoRouter router = GoRouter(
   routes: <RouteBase>[
@@ -17,7 +19,10 @@ final GoRouter router = GoRouter(
           path: Routes.gamePath,
           builder: (BuildContext context, GoRouterState state) {
             final game = state.extra as Game;
-            return GameScreen(game);
+            return BlocProvider(
+              create: (context) => GameBloc(game),
+              child: const GameScreen(),
+            );
           },
         ),
       ],
