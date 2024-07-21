@@ -18,6 +18,7 @@ extension MapToGameEntity on Map<String, dynamic> {
         genres: genres,
         coverImgUrl: coverImgUrlFormatted,
         screenShotUrls: formattedScreenshotUrls,
+        isFavorite: false
       );
     } else {
       throw const FormatException(_formatExceptionText);
