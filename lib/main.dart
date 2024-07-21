@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:game_finder/data/repository/auth_repository.dart';
+import 'package:game_finder/data/repository/game_search_repository.dart';
 import 'package:game_finder/presentation/bloc/search/search_bloc.dart';
 import 'package:game_finder/presentation/constants/strings.dart';
 import 'package:game_finder/presentation/screen/search_screen.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const App());
 }
 
@@ -13,14 +17,31 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SearchBloc>(
-      create: (_) => SearchBloc(),
-      child: MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(Strings.appTitle),
+    final clientId = dotenv.env['CLIENT_ID'];
+    final clientSecret = dotenv.env['CLIENT_SECRET'];
+    return RepositoryProvider<AuthRepository>(
+      create: (context) => AuthRepository(
+          clientId: clientId!,
+          clientSecret: clientSecret!,
+          tokenRequestToleranceInSeconds: 4),
+      child: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider<GameSearchRepository>(
+            create: (context) => GameSearchRepository(
+                authRepository: context.read<AuthRepository>(),
+                clientId: clientId!),
           ),
-          body: const SearchScreen(),
+        ],
+        child: BlocProvider<SearchBloc>(
+          create: (context) => SearchBloc(context.read<GameSearchRepository>()),
+          child: MaterialApp(
+            home: Scaffold(
+              appBar: AppBar(
+                title: const Text(Strings.appTitle),
+              ),
+              body: const SearchScreen(),
+            ),
+          ),
         ),
       ),
     );
