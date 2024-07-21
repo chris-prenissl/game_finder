@@ -23,7 +23,7 @@ void main() {
           authRepository: authRepository, clientId: '1234');
     });
 
-    test('getOrRequestToken no response body creates exception', () async {
+    test('getOrRequestToken authenticated, no response body, creates exception', () async {
       mockClient = MockClient((request) async {
         return http.Response(jsonEncode({'access_token' : 'token', 'expires_in': 40000}), 200);
       });

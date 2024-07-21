@@ -26,20 +26,20 @@ class GameSearchRepository {
         _clientId = clientId;
 
   Future<List<Game>> searchGames(String searchTerm, http.Client client) async {
+    final token = await _authRepository.getOrRequestToken(client);
+
+    final headers = {
+      RepositoryConstants.clientIdHeaderKey: _clientId,
+      RepositoryConstants.authorizationHeaderKey:
+          "${RepositoryConstants.bearer} $token",
+    };
+    final url = Uri.https(
+      igdbBaseUrl,
+      versionPath + path,
+    );
+    final searchBody = sprintf(_query, [searchTerm]);
+
     try {
-      final token = await _authRepository.getOrRequestToken(client);
-
-      final headers = {
-        RepositoryConstants.clientIdHeaderKey: _clientId,
-        RepositoryConstants.authorizationHeaderKey:
-            "${RepositoryConstants.bearer} $token",
-      };
-      final url = Uri.https(
-        igdbBaseUrl,
-        versionPath + path,
-      );
-      final searchBody = sprintf(_query, [searchTerm]);
-
       final searchResponse =
           await client.post(url, headers: headers, body: searchBody);
       final searchBodyUtf8 = utf8.decode(searchResponse.bodyBytes);
@@ -50,15 +50,14 @@ class GameSearchRepository {
           .map((Map<String, dynamic> element) => element.toGameEntity())
           .toList();
       return games;
-    } catch(e) {
+    } catch (e) {
       if (e is HttpException) {
         throw GameSearchException(GameSearchException.requestError);
       } else if (e is TypeError || e is FormatException) {
         throw GameSearchException(GameSearchException.wrongParametersError);
       }
       rethrow;
-    }
-    finally {
+    } finally {
       client.close();
     }
   }
