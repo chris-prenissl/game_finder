@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:game_finder/data/dto/game_dto.dart';
 import 'package:game_finder/data/repository/auth_repository.dart';
+import 'package:game_finder/data/repository/game_search_exception.dart';
 import 'package:game_finder/data/repository/repository_constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/retry.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../../domain/model/game.dart';
@@ -49,7 +50,15 @@ class GameSearchRepository {
           .map((Map<String, dynamic> element) => element.toGameEntity())
           .toList();
       return games;
-    } finally {
+    } catch(e) {
+      if (e is HttpException) {
+        throw GameSearchException(GameSearchException.requestError);
+      } else if (e is TypeError || e is FormatException) {
+        throw GameSearchException(GameSearchException.wrongParametersError);
+      }
+      rethrow;
+    }
+    finally {
       client.close();
     }
   }
