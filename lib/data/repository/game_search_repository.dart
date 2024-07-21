@@ -42,22 +42,11 @@ class GameSearchRepository {
       final searchResponse =
           await client.post(url, headers: headers, body: searchBody);
       final searchBodyUtf8 = utf8.decode(searchResponse.bodyBytes);
-      final decodedSearchResponse = jsonDecode(searchBodyUtf8) as List;
-      final games = decodedSearchResponse.map((element) {
-        final name = element[RepositoryConstants.nameBodyKey];
-        final genres = element['genres']?.map((genre) {
-          return genre['name'];
-        });
-        final coverUrl = element['cover']?['url'];
-        final screenshotUrls = element['screenshots']?.map((screenshot) {
-          return screenshot['url'];
-        });
-        return GameDto(
-            title: name,
-            genres: [...?genres],
-            coverImgUrl: coverUrl,
-            screenShotUrls: [...?screenshotUrls]);
-      }).nonNulls;
+      final decodedSearchResponse =
+          jsonDecode(searchBodyUtf8) as List;
+      final games = decodedSearchResponse
+          .map((element) => GameDto.fromJson(element))
+          .nonNulls;
       return games.toList();
     } finally {
       client.close();

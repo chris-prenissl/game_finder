@@ -49,7 +49,7 @@ class SearchScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(game.title, style: const TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                        Text(game.name, style: const TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
                         Text(game.genres.join(", "),)
                       ],
                     ));
