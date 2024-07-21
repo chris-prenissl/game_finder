@@ -14,14 +14,14 @@ part 'search_state.dart';
 part 'search_bloc.freezed.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchUIState _uiState = const SearchUIState(
-      input: '', foundGames: [], errorText: '', selectedGame: null);
+  static const SearchUIState _initialState =
+      SearchUIState(input: '', foundGames: [], errorText: null);
+  SearchUIState _uiState = _initialState;
 
   final GameSearchRepository _gameSearchRepository;
 
   SearchBloc(this._gameSearchRepository)
-      : super(const _Result(
-            uiState: SearchUIState(input: '', foundGames: [], errorText: ''))) {
+      : super(const _Result(uiState: _initialState)) {
     on<_InputChange>((event, emit) {
       _deselectGame();
       _resetErrorText();
@@ -31,7 +31,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<_Search>((event, emit) async {
       _deselectGame();
       if (_uiState.input.isEmpty) {
-        _uiState = _uiState.copyWith(errorText: SearchUIState.missingInputError);
+        _uiState =
+            _uiState.copyWith(errorText: SearchUIState.missingInputError);
         emit(_Result(uiState: _uiState));
         return;
       }
