@@ -6,4 +6,8 @@ class Strings {
   static const String genreTitle = 'Genre';
 
   static const String commaSeparator = ', ';
+
+  static const String dotEnvFileName = '.env';
+  static const String clientIdDotEnvKey = 'CLIENT_ID';
+  static const String clientSecretDotEnvKey = 'CLIENT_SECRET';
 }

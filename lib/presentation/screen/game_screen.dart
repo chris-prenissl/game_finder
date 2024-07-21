@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../../constants/numbers.dart';
+import '../../constants/strings.dart';
 import '../../domain/model/game.dart';
-import '../constants/numbers.dart';
-import '../constants/strings.dart';
 
 class GameScreen extends StatelessWidget {
   final Game _game;

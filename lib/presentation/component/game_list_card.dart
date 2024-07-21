@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../constants/numbers.dart';
+import '../../constants/strings.dart';
 import '../../domain/model/game.dart';
-import '../constants/numbers.dart';
-import '../constants/strings.dart';
 
 class GameListCard extends StatelessWidget {
   final Game _game;

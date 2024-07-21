@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:game_finder/data/repository/auth_exception.dart';
 import 'package:game_finder/data/repository/repository_constants.dart';
 import 'package:http/http.dart' as http;

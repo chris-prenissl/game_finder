@@ -6,8 +6,11 @@ import 'package:game_finder/data/repository/game_search_repository.dart';
 import 'package:game_finder/presentation/bloc/search/search_bloc.dart';
 import 'package:game_finder/presentation/router.dart';
 
+import 'constants/colors.dart';
+import 'constants/strings.dart';
+
 Future<void> main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: Strings.dotEnvFileName);
   runApp(const App());
 }
 
@@ -16,8 +19,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final clientId = dotenv.env['CLIENT_ID'];
-    final clientSecret = dotenv.env['CLIENT_SECRET'];
+    final clientId = dotenv.env[Strings.clientIdDotEnvKey];
+    final clientSecret = dotenv.env[Strings.clientSecretDotEnvKey];
     return RepositoryProvider<AuthRepository>(
       create: (context) => AuthRepository(
           clientId: clientId!,
@@ -30,6 +33,7 @@ class App extends StatelessWidget {
         child: BlocProvider<SearchBloc>(
           create: (context) => SearchBloc(context.read<GameSearchRepository>()),
           child: MaterialApp.router(
+            theme: ThemeData.from(colorScheme: ColorScheme.fromSeed(seedColor: ColorConstants.seedColor)),
             routerConfig: router,
           ),
         ),

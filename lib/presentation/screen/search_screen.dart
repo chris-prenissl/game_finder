@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_finder/presentation/bloc/search/search_bloc.dart';
 import 'package:game_finder/presentation/component/game_list_card.dart';
-import 'package:game_finder/presentation/constants/numbers.dart';
 import 'package:game_finder/presentation/router.dart';
 import 'package:go_router/go_router.dart';
 
-import '../constants/strings.dart';
+import '../../constants/numbers.dart';
+import '../../constants/strings.dart';
 
 class SearchScreen extends StatelessWidget {
   final textEditingController = TextEditingController();
