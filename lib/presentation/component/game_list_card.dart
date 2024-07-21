@@ -20,10 +20,19 @@ class GameListCard extends StatelessWidget {
           children: [
             if (coverImageUrl != null)
               Padding(
-                  padding: const EdgeInsets.all(Numbers.standardPadding),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(Numbers.standardBorderRadius),
-                      child: Image.network(height: Numbers.gameCardHeight, coverImageUrl),),),
+                padding: const EdgeInsets.all(Numbers.standardPadding),
+                child: ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(Numbers.standardBorderRadius),
+                  child: Image.network(
+                      height: Numbers.gameCardHeight, coverImageUrl),
+                ),
+              ),
+            if (coverImageUrl == null)
+              const SizedBox(
+                width: Numbers.gameCardHeight,
+                height: Numbers.gameCardHeight,
+              ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,9 +44,9 @@ class GameListCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   if (genres.isNotEmpty)
-                  Text(
-                    '${Strings.genreTitle}: ${genres.join(Strings.commaSeparator)}',
-                  )
+                    Text(
+                      '${Strings.genreTitle}: ${genres.join(Strings.commaSeparator)}',
+                    )
                 ],
               ),
             ),

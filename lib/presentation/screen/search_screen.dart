@@ -36,7 +36,8 @@ class SearchScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(Numbers.standardPadding),
+                          padding:
+                              const EdgeInsets.all(Numbers.standardPadding),
                           child: TextField(
                             decoration: const InputDecoration(
                               hintText: Strings.searchHint,
@@ -59,23 +60,33 @@ class SearchScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: uiState.foundGames.length,
-                        itemBuilder: (context, index) {
-                          final game = uiState.foundGames[index];
-                          return GestureDetector(
-                            onTap: () => bloc.add(SearchEvent.selectGame(game)),
-                            child: GameListCard(game),
-                          );
-                        }),
+                  BlocBuilder<SearchBloc, SearchState>(
+                    builder: (context, state) {
+                      final errorText = state.uiState.errorText;
+                      if (errorText != null) {
+                        return Text(
+                          errorText,
+                          style: const TextStyle(color: Colors.redAccent),
+                        );
+                      }
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: uiState.foundGames.length,
+                          itemBuilder: (context, index) {
+                            final game = uiState.foundGames[index];
+                            return GestureDetector(
+                              onTap: () =>
+                                  bloc.add(SearchEvent.selectGame(game)),
+                              child: GameListCard(game),
+                            );
+                          },
+                        ),
+                      );
+                    },
                   )
                 ],
               );
             },
-            error: (_) => const Center(
-              child: CircularProgressIndicator(),
-            ),
           );
         },
       ),

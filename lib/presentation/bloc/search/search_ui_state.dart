@@ -8,7 +8,9 @@ class SearchUIState with _$SearchUIState {
   const factory SearchUIState({
     required String input,
     required List<Game> foundGames,
-    required String errorText,
+    String? errorText,
     Game? selectedGame,
 }) = _SearchUIState;
+
+  static const String missingInputError = 'Missing Input';
 }
