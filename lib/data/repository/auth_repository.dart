@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:game_finder/data/repository/auth_exception.dart';
 import 'package:game_finder/data/repository/repository_constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/retry.dart';
 
 class AuthRepository {
   static const String authBaseUrl = 'id.twitch.tv';
@@ -23,42 +25,50 @@ class AuthRepository {
         _clientSecret = clientSecret,
         _tokenRequestToleranceInSeconds = tokenRequestToleranceInSeconds;
 
-  Future<String> getOrRequestToken() async {
-    if (!_isTokenValid()) {
-      await _refreshToken();
+  Future<String> getOrRequestToken(http.Client client) async {
+    try {
+      if (!_isTokenValid()) {
+        await _refreshToken(client);
+      }
+      return _token!;
+    } catch (e) {
+      if (e is HttpException) {
+        throw AuthException(AuthException.requestError);
+      } else if (e is TypeError || e is FormatException) {
+        throw AuthException(AuthException.missingParameterMessage);
+      } else {
+        rethrow;
+      }
     }
-    return _token!;
   }
 
-  Future<void> _refreshToken() async {
-    final client = RetryClient(http.Client());
+  Future<void> _refreshToken(http.Client client) async {
     final queryParams = {
-      RepositoryConstants.clientIdQueryKey : _clientId,
-      RepositoryConstants.clientSecretQueryKey : _clientSecret,
-      RepositoryConstants.grantTypeQueryKey : RepositoryConstants.grantTypeValue
+      RepositoryConstants.clientIdQueryKey: _clientId,
+      RepositoryConstants.clientSecretQueryKey: _clientSecret,
+      RepositoryConstants.grantTypeQueryKey: RepositoryConstants.grantTypeValue
     };
     final url = Uri.https(
       authBaseUrl,
       authPath,
       queryParams,
     );
-    try {
-      final response = await client.post(url);
-      final decodedResponse =
-          jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-      _token = decodedResponse[RepositoryConstants.accessTokenBodyKey];
-      final expireSeconds = decodedResponse[RepositoryConstants.expiresInBodyKey];
-      _tokenExpireTime = DateTime.now().add(Duration(seconds: expireSeconds));
-    } finally {
-      client.close();
-    }
+
+    int? expireSeconds;
+    final response = await client.post(url);
+    final decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+    _token = decodedResponse[RepositoryConstants.accessTokenBodyKey];
+    expireSeconds = decodedResponse[RepositoryConstants.expiresInBodyKey];
+    _tokenExpireTime = DateTime.now().add(Duration(seconds: expireSeconds!));
   }
 
   bool _isTokenValid() {
     if (_tokenExpireTime == null) {
       return false;
     }
-    return DateTime.now().isAfter(_tokenExpireTime!
-        .add(Duration(seconds: _tokenRequestToleranceInSeconds)));
+    final now = DateTime.now();
+    final nowWithTolerance =
+        now.add(Duration(seconds: _tokenRequestToleranceInSeconds));
+    return _tokenExpireTime!.isAfter(nowWithTolerance);
   }
 }

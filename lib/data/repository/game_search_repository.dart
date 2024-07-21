@@ -24,23 +24,21 @@ class GameSearchRepository {
       : _authRepository = authRepository,
         _clientId = clientId;
 
-  Future<List<Game>> searchGames(String searchTerm) async {
-    final token = await _authRepository.getOrRequestToken();
-
-    final client = RetryClient(http.Client());
-
-    final headers = {
-      RepositoryConstants.clientIdHeaderKey: _clientId,
-      RepositoryConstants.authorizationHeaderKey:
-          "${RepositoryConstants.bearer} $token",
-    };
-    final url = Uri.https(
-      igdbBaseUrl,
-      versionPath + path,
-    );
-    final searchBody = sprintf(_query, [searchTerm]);
-
+  Future<List<Game>> searchGames(String searchTerm, http.Client client) async {
     try {
+      final token = await _authRepository.getOrRequestToken(client);
+
+      final headers = {
+        RepositoryConstants.clientIdHeaderKey: _clientId,
+        RepositoryConstants.authorizationHeaderKey:
+            "${RepositoryConstants.bearer} $token",
+      };
+      final url = Uri.https(
+        igdbBaseUrl,
+        versionPath + path,
+      );
+      final searchBody = sprintf(_query, [searchTerm]);
+
       final searchResponse =
           await client.post(url, headers: headers, body: searchBody);
       final searchBodyUtf8 = utf8.decode(searchResponse.bodyBytes);
