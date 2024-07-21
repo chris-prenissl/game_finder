@@ -9,7 +9,9 @@ import 'package:go_router/go_router.dart';
 import '../constants/strings.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+  final textEditingController = TextEditingController();
+
+  SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class SearchScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          textEditingController.text = state.uiState.input;
           return state.when(
             searching: (_) => const Center(
               child: CircularProgressIndicator(),
@@ -39,10 +42,12 @@ class SearchScreen extends StatelessWidget {
                           padding:
                               const EdgeInsets.all(Numbers.standardPadding),
                           child: TextField(
-                            decoration: const InputDecoration(
+                            controller: textEditingController,
+                            decoration: InputDecoration(
                               hintText: Strings.searchHint,
                               labelText: Strings.searchLabelText,
-                              border: OutlineInputBorder(),
+                              border: const OutlineInputBorder(),
+                              errorText: uiState.errorText,
                             ),
                             onChanged: (input) =>
                                 bloc.add(SearchEvent.inputChange(input)),
@@ -60,29 +65,18 @@ class SearchScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  BlocBuilder<SearchBloc, SearchState>(
-                    builder: (context, state) {
-                      final errorText = state.uiState.errorText;
-                      if (errorText != null) {
-                        return Text(
-                          errorText,
-                          style: const TextStyle(color: Colors.redAccent),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: uiState.foundGames.length,
+                      itemBuilder: (context, index) {
+                        final game = uiState.foundGames[index];
+                        return GestureDetector(
+                          onTap: () =>
+                              bloc.add(SearchEvent.selectGame(game)),
+                          child: GameListCard(game),
                         );
-                      }
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: uiState.foundGames.length,
-                          itemBuilder: (context, index) {
-                            final game = uiState.foundGames[index];
-                            return GestureDetector(
-                              onTap: () =>
-                                  bloc.add(SearchEvent.selectGame(game)),
-                              child: GameListCard(game),
-                            );
-                          },
-                        ),
-                      );
-                    },
+                      },
+                    ),
                   )
                 ],
               );

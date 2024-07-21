@@ -8,7 +8,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: Routes.base,
       builder: (BuildContext context, GoRouterState state) {
-        return const SearchScreen();
+        return SearchScreen();
       },
       routes: <RouteBase>[
         GoRoute(
