@@ -9,5 +9,6 @@ class SearchUIState with _$SearchUIState {
     required String input,
     required List<Game> foundGames,
     required String errorText,
+    Game? selectedGame,
 }) = _SearchUIState;
 }
