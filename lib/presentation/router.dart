@@ -3,6 +3,8 @@ import 'package:game_finder/presentation/screen/game_screen.dart';
 import 'package:game_finder/presentation/screen/search_screen.dart';
 import 'package:go_router/go_router.dart';
 
+import '../domain/model/game.dart';
+
 final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
@@ -14,7 +16,8 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: Routes.gamePath,
           builder: (BuildContext context, GoRouterState state) {
-            return const GameScreen();
+            final game = state.extra as Game;
+            return GameScreen(game);
           },
         ),
       ],

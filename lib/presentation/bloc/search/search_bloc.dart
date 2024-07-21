@@ -5,8 +5,6 @@ import 'package:game_finder/presentation/bloc/search/search_ui_state.dart';
 import 'package:http/retry.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../domain/model/game.dart';
-
 part 'search_event.dart';
 
 part 'search_state.dart';
@@ -45,16 +43,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           _uiState.input.trim(), RetryClient(http.Client()));
       _uiState = _uiState.copyWith(foundGames: games);
 
-      emit(_Result(uiState: _uiState));
-    });
-    on<_SelectGame>((event, emit) {
-      _resetErrorText();
-      _uiState = _uiState.copyWith(selectedGame: event.game);
-      emit(_Result(uiState: _uiState));
-    });
-    on<_DeSelectGame>((event, emit) {
-      _resetErrorText();
-      _deselectGame();
       emit(_Result(uiState: _uiState));
     });
   }

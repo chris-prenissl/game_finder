@@ -19,12 +19,7 @@ class SearchScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(Strings.appTitle),
       ),
-      body: BlocConsumer<SearchBloc, SearchState>(
-        listener: (context, state) {
-          if (state.uiState.selectedGame != null) {
-            context.push(Routes.base + Routes.gamePath);
-          }
-        },
+      body: BlocBuilder<SearchBloc, SearchState>(
         builder: (context, state) {
           textEditingController.text = state.uiState.input;
           return state.when(
@@ -71,8 +66,7 @@ class SearchScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final game = uiState.foundGames[index];
                         return GestureDetector(
-                          onTap: () =>
-                              bloc.add(SearchEvent.selectGame(game)),
+                          onTap: () => context.push(Routes.base + Routes.gamePath, extra: game),
                           child: GameListCard(game),
                         );
                       },
