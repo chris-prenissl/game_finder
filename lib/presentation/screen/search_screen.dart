@@ -40,11 +40,26 @@ class SearchScreen extends StatelessWidget {
                     )
                   ],
                 ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: uiState.foundGames.length,
+                      itemBuilder: (context, index) {
+                        final game = uiState.foundGames[index];
+                    return Card(child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(game.title, style: const TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                        Text(game.genres.join(", "),)
+                      ],
+                    ));
+                  }),
+                )
               ],
             );
           },
           error: (_) => const Center(
-            child: Text('Error'),
+            child: CircularProgressIndicator(),
           ),
         );
       },
