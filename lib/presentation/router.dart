@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_finder/data/repository/favorite_repository.dart';
 import 'package:game_finder/presentation/screen/game_screen.dart';
 import 'package:game_finder/presentation/screen/search_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +21,7 @@ final GoRouter router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             final game = state.extra as Game;
             return BlocProvider(
-              create: (context) => GameBloc(game),
+              create: (context) => GameBloc(game, context.read<FavoriteRepository>()),
               child: const GameScreen(),
             );
           },

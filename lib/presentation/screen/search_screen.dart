@@ -66,7 +66,13 @@ class SearchScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final game = uiState.foundGames[index];
                         return GestureDetector(
-                          onTap: () => context.push(Routes.base + Routes.gamePath, extra: game),
+                          onTap: () {
+                            context.push(Routes.base + Routes.gamePath,
+                                extra: game);
+                            context
+                                .read<SearchBloc>()
+                                .add(const SearchEvent.selectGame());
+                          },
                           child: GameListCard(game),
                         );
                       },

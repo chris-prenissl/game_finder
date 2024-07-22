@@ -21,13 +21,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc(this._gameSearchRepository)
       : super(const _Result(uiState: _initialState)) {
     on<_InputChange>((event, emit) {
-      _deselectGame();
       _resetErrorText();
       _uiState = _uiState.copyWith(input: event.input);
       emit(_Result(uiState: _uiState));
     });
-    on<_Search>((event, emit) async {
-      _deselectGame();
+    on<_Search>((_, emit) async {
       if (_uiState.input.isEmpty) {
         _uiState =
             _uiState.copyWith(errorText: SearchUIState.missingInputError);
@@ -45,13 +43,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       emit(_Result(uiState: _uiState));
     });
+    on<_SelectGame>((_, emit) async {
+      _uiState = const SearchUIState(input: '', foundGames: []);
+      emit(_Result(uiState: _uiState));
+    });
   }
 
   void _resetErrorText() {
     _uiState = _uiState.copyWith(errorText: null);
-  }
-
-  void _deselectGame() {
-    _uiState = _uiState.copyWith(selectedGame: null);
   }
 }

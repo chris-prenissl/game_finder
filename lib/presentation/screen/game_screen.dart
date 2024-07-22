@@ -31,7 +31,7 @@ class GameScreen extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => context.read<GameBloc>().add(const GameEvent.toggleFavorite()),
                 icon:
                 Icon(game.isFavorite ? Icons.favorite : Icons.favorite_border),
               )

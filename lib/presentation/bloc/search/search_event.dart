@@ -4,4 +4,5 @@ part of 'search_bloc.dart';
 class SearchEvent with _$SearchEvent {
   const factory SearchEvent.inputChange(String input) = _InputChange;
   const factory SearchEvent.search() = _Search;
+  const factory SearchEvent.selectGame() = _SelectGame;
 }
