@@ -31,9 +31,11 @@ class GameScreen extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                onPressed: () => context.read<GameBloc>().add(const GameEvent.toggleFavorite()),
-                icon:
-                Icon(game.isFavorite ? Icons.favorite : Icons.favorite_border),
+                onPressed: () => context
+                    .read<GameBloc>()
+                    .add(const GameEvent.toggleFavorite()),
+                icon: Icon(
+                    game.isFavorite ? Icons.favorite : Icons.favorite_border),
               )
             ],
           ),
@@ -50,20 +52,19 @@ class GameScreen extends StatelessWidget {
                     ),
                   Text(
                     game.summary ?? '',
-                    style: const TextStyle(
-                        fontSize: Numbers.gameSummaryFontSize),
+                    style:
+                        const TextStyle(fontSize: Numbers.gameSummaryFontSize),
                   ),
                   const SizedBox(height: Numbers.bigPadding),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: game.screenShotUrls
-                          .map((url) =>
-                          Padding(
-                            padding:
-                            const EdgeInsets.all(Numbers.standardPadding),
-                            child: Image.network(url),
-                          ))
+                          .map((url) => Padding(
+                                padding: const EdgeInsets.all(
+                                    Numbers.standardPadding),
+                                child: Image.network(url),
+                              ))
                           .toList(),
                     ),
                   ),

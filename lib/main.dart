@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:game_finder/constants/numbers.dart';
 import 'package:game_finder/data/repository/auth_repository.dart';
 import 'package:game_finder/data/repository/favorite_repository.dart';
 import 'package:game_finder/data/repository/game_search_repository.dart';
@@ -30,7 +31,8 @@ class App extends StatelessWidget {
           create: (context) => AuthRepository(
               clientId: clientId!,
               clientSecret: clientSecret!,
-              tokenRequestToleranceInSeconds: 4),
+              tokenRequestToleranceInSeconds:
+                  Numbers.tokenRefreshToleranceDuration),
         ),
         RepositoryProvider(
           create: (context) => FavoriteRepository(),

@@ -1,7 +1,6 @@
 import 'package:hive/hive.dart';
 
 class FavoriteRepository {
-
   Future<void> storeGameFavoriteId(int id) async {
     final box = await Hive.openBox(_favoriteTable);
     box.put(id, true);

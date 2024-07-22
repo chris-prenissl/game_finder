@@ -23,7 +23,9 @@ class GameSearchRepository {
   final String _clientId;
 
   GameSearchRepository(
-      {required AuthRepository authRepository, required FavoriteRepository favoriteRepository, required String clientId})
+      {required AuthRepository authRepository,
+      required FavoriteRepository favoriteRepository,
+      required String clientId})
       : _authRepository = authRepository,
         _favoriteRepository = favoriteRepository,
         _clientId = clientId;
@@ -34,7 +36,7 @@ class GameSearchRepository {
     final headers = {
       RepositoryConstants.clientIdHeaderKey: _clientId,
       RepositoryConstants.authorizationHeaderKey:
-      "${RepositoryConstants.bearer} $token",
+          "${RepositoryConstants.bearer} $token",
     };
     final url = Uri.https(
       igdbBaseUrl,
@@ -44,7 +46,7 @@ class GameSearchRepository {
 
     try {
       final searchResponse =
-      await client.post(url, headers: headers, body: searchBody);
+          await client.post(url, headers: headers, body: searchBody);
       final searchBodyUtf8 = utf8.decode(searchResponse.bodyBytes);
       final decodedSearchResponse = jsonDecode(searchBodyUtf8) as List;
 

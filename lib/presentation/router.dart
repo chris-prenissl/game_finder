@@ -21,7 +21,8 @@ final GoRouter router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             final game = state.extra as Game;
             return BlocProvider(
-              create: (context) => GameBloc(game, context.read<FavoriteRepository>()),
+              create: (context) =>
+                  GameBloc(game, context.read<FavoriteRepository>()),
               child: const GameScreen(),
             );
           },
