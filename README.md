@@ -1,16 +1,38 @@
-# game_finder
+# Game Finder
 
-An app that lets you find your favorite games.
+## Overview
 
-## Getting Started
+_Game Finder_ is a flutter application for iOS and Android that lets you search the IGDB library
+and mark your favorites.
 
-This project is a starting point for a Flutter application.
+## Technologies
 
-A few resources to get you started if this is your first Flutter project:
+_Flutter_ | _Dart_ | _bloc_ | _http_ | _hive_ | _go_router_
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Images
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Game Finder Screen 1](screenshots/search.png) ![Casual Chess Screen 2](screenshots/game.png)
+
+## Usage
+
+### Prerequisites
+
+- Flutter SDK
+- Installed iOS or Android Emulator
+
+### Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/chris-prenissl/game_finder.git
+   ```
+2. Start a emulator
+
+3. Open the Terminal inside the project folder:
+   ```bash
+   flutter run
+   ```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
