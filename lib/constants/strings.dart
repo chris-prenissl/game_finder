@@ -10,4 +10,6 @@ class Strings {
   static const String dotEnvFileName = '.env';
   static const String clientIdDotEnvKey = 'CLIENT_ID';
   static const String clientSecretDotEnvKey = 'CLIENT_SECRET';
+
+  static const String imageLoadingErrorText = 'Image Loading Error';
 }

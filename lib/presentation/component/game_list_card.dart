@@ -26,7 +26,11 @@ class GameListCard extends StatelessWidget {
                   borderRadius:
                       BorderRadius.circular(Numbers.standardBorderRadius),
                   child: Image.network(
-                      height: Numbers.gameCardHeight, coverImageUrl),
+                    height: Numbers.gameCardHeight,
+                    coverImageUrl,
+                    errorBuilder: (context, obj, stack) =>
+                        const Text(Strings.imageLoadingErrorText),
+                  ),
                 ),
               ),
             if (coverImageUrl == null)
@@ -53,7 +57,8 @@ class GameListCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(Numbers.standardPadding),
-              child: Icon(_game.isFavorite ? Icons.favorite : Icons.favorite_border),
+              child: Icon(
+                  _game.isFavorite ? Icons.favorite : Icons.favorite_border),
             )
           ],
         ),

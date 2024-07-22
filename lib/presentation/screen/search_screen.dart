@@ -72,7 +72,8 @@ class SearchScreen extends StatelessWidget {
                                 Routes.base + Routes.gamePath,
                                 extra: game);
                             if (isFavorite != null) {
-                              bloc.add(SearchEvent.setFavorite(game.id, isFavorite));
+                              bloc.add(
+                                  SearchEvent.setFavorite(game.id, isFavorite));
                             }
                           },
                           child: GameListCard(game),

@@ -54,7 +54,10 @@ class GameScreen extends StatelessWidget {
                     if (coverUrl != null)
                       Padding(
                         padding: const EdgeInsets.all(Numbers.standardPadding),
-                        child: Image.network(coverUrl),
+                        child: Image.network(coverUrl,
+                            errorBuilder: (context, obj, stack) => const Text(
+                                  Strings.imageLoadingErrorText,
+                                )),
                       ),
                     Text(
                       game.summary ?? '',
@@ -69,7 +72,12 @@ class GameScreen extends StatelessWidget {
                             .map((url) => Padding(
                                   padding: const EdgeInsets.all(
                                       Numbers.standardPadding),
-                                  child: Image.network(url),
+                                  child: Image.network(
+                                    url,
+                                    errorBuilder: (context, obj, stack) =>
+                                        const Text(
+                                            Strings.imageLoadingErrorText),
+                                  ),
                                 ))
                             .toList(),
                       ),
