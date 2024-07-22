@@ -5,6 +5,8 @@ import 'package:game_finder/presentation/bloc/search/search_ui_state.dart';
 import 'package:http/retry.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../domain/model/game.dart';
+
 part 'search_event.dart';
 
 part 'search_state.dart';
@@ -43,8 +45,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       emit(_Result(uiState: _uiState));
     });
-    on<_SelectGame>((_, emit) async {
-      _uiState = const SearchUIState(input: '', foundGames: []);
+    on<_SetFavorite>((event, emit) async {
+      List<Game> foundGames = [..._uiState.foundGames];
+      for (var i = 0; i < foundGames.length; i++) {
+        final game = foundGames[i];
+        if (game.id == event.gameId) {
+          foundGames[i] = game.copyWith(isFavorite: event.isFavorite);
+          break;
+        }
+      }
+
+      _uiState = _uiState.copyWith(foundGames: foundGames);
       emit(_Result(uiState: _uiState));
     });
   }

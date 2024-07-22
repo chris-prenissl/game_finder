@@ -66,12 +66,14 @@ class SearchScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final game = uiState.foundGames[index];
                         return GestureDetector(
-                          onTap: () {
-                            context.push(Routes.base + Routes.gamePath,
+                          onTap: () async {
+                            final bloc = context.read<SearchBloc>();
+                            bool? isFavorite = await context.push(
+                                Routes.base + Routes.gamePath,
                                 extra: game);
-                            context
-                                .read<SearchBloc>()
-                                .add(const SearchEvent.selectGame());
+                            if (isFavorite != null) {
+                              bloc.add(SearchEvent.setFavorite(game.id, isFavorite));
+                            }
                           },
                           child: GameListCard(game),
                         );

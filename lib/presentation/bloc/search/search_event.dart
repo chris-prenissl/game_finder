@@ -6,5 +6,5 @@ class SearchEvent with _$SearchEvent {
 
   const factory SearchEvent.search() = _Search;
 
-  const factory SearchEvent.selectGame() = _SelectGame;
+  const factory SearchEvent.setFavorite(int gameId,bool isFavorite) = _SetFavorite;
 }
