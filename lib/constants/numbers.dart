@@ -7,4 +7,6 @@ class Numbers {
   static const double gameCardHeight = 100.0;
 
   static const double gameSummaryFontSize = 18.0;
+
+  static const int tokenRefreshToleranceDuration = 4;
 }
