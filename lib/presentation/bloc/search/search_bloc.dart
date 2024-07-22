@@ -50,6 +50,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           emit(_Result(uiState: _uiState));
         } else {
           _uiState = _uiState.copyWith(errorText: e.toString());
+          emit(_Result(uiState: _uiState));
         }
       }
 
