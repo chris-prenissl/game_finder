@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:game_finder/data/repository/auth_exception.dart';
 import 'package:game_finder/data/repository/repository_constants.dart';
 import 'package:http/http.dart' as http;
+
+import '../exception/auth_exception.dart';
 
 class AuthRepository {
   static const String authBaseUrl = 'id.twitch.tv';
@@ -31,10 +32,10 @@ class AuthRepository {
       }
       return _token!;
     } catch (e) {
-      if (e is HttpException) {
-        throw AuthException(AuthException.requestError);
+      if (e is IOException) {
+        throw AuthException(message: AuthException.requestError);
       } else if (e is TypeError || e is FormatException) {
-        throw AuthException(AuthException.missingParameterMessage);
+        throw AuthException(message: AuthException.missingParameterMessage);
       } else {
         rethrow;
       }

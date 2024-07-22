@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_finder/data/repository/auth_exception.dart';
+import 'package:game_finder/data/exception/auth_exception.dart';
 import 'package:game_finder/data/repository/auth_repository.dart';
 import 'package:game_finder/data/repository/repository_constants.dart';
 import 'package:http/testing.dart';

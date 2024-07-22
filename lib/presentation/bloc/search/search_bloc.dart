@@ -5,6 +5,7 @@ import 'package:game_finder/presentation/bloc/search/search_ui_state.dart';
 import 'package:http/retry.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../data/exception/game_finder_exception.dart';
 import '../../../domain/model/game.dart';
 
 part 'search_event.dart';
@@ -39,9 +40,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         uiState: _uiState,
       ));
 
-      final games = await _gameSearchRepository.searchGames(
-          _uiState.input.trim(), RetryClient(http.Client()));
-      _uiState = _uiState.copyWith(foundGames: games);
+      try {
+        final games = await _gameSearchRepository.searchGames(
+            _uiState.input.trim(), RetryClient(http.Client()));
+        _uiState = _uiState.copyWith(foundGames: games);
+      } catch (e) {
+        if (e is GameFinderException) {
+          _uiState = _uiState.copyWith(errorText: e.message);
+          emit(_Result(uiState: _uiState));
+        } else {
+          _uiState = _uiState.copyWith(errorText: e.toString());
+        }
+      }
 
       emit(_Result(uiState: _uiState));
     });
