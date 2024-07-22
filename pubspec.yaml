@@ -1,5 +1,6 @@
 name: game_finder
-description: "An app that lets you find your favorite games."
+description: "Game Finder is a flutter application for iOS and Android that lets you search the IGDB library
+and mark your favorites."
 
 publish_to: 'none'
 
