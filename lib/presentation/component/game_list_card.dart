@@ -17,6 +17,7 @@ class GameListCard extends StatelessWidget {
       height: Numbers.gameCardHeight,
       child: Card(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (coverImageUrl != null)
               Padding(
@@ -50,6 +51,10 @@ class GameListCard extends StatelessWidget {
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(Numbers.standardPadding),
+              child: Icon(_game.isFavorite ? Icons.favorite : Icons.favorite_border),
+            )
           ],
         ),
       ),
