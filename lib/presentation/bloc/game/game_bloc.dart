@@ -16,15 +16,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   GameBloc(this._game, this._favoriteRepository)
       : super(GameState.baseState(_game)) {
-    on<_ToggleFavorite>((event, emit) {
+    on<_ToggleFavorite>((event, emit) async {
+      await _favoriteRepository.toggleGameFavorite(_game.id);
       _game = _game.copyWith(isFavorite: !_game.isFavorite);
-      final id = _game.id;
-      if (_game.isFavorite) {
-        _favoriteRepository.storeGameFavoriteId(id);
-      } else {
-        _favoriteRepository.removeGameFavoriteId(id);
-      }
-
       emit(GameState.baseState(_game));
     });
   }
