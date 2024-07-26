@@ -6,7 +6,7 @@ extension ListStringParsing on Map<String, dynamic> {
   }
 }
 
-extension ImageUrlFormatter on String {
+extension IGDBImageUrlFormatter on String {
   String getFormattedImageUrl() {
     return "https:$this";
   }
