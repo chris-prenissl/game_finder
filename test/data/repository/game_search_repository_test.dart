@@ -20,7 +20,7 @@ void main() {
     late MockClient mockClient;
 
     setUp(() async {
-      Hive.init('${Directory.current.path}/test/data/repository');
+      Hive.init('${Directory.current.path}/test/data/repository/hive_game_search_test');
       favoriteRepository = FavoriteRepository();
       authRepository = AuthRepository(
           clientId: 'clientId',
@@ -98,6 +98,7 @@ void main() {
 
     tearDown(() {
       mockClient.close();
+      Hive.deleteFromDisk();
     });
   });
 }
