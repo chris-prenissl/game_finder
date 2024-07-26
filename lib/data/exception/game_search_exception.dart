@@ -4,6 +4,4 @@ class GameSearchException extends GameFinderException {
   GameSearchException({required super.message});
 
   static const String requestError = 'GameSearch: Request error';
-  static const String wrongParametersError = 'GameSearch: Wrong parameters';
-
 }

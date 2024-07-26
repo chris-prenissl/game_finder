@@ -65,8 +65,6 @@ class GameSearchRepository {
     } catch (e) {
       if (e is IOException) {
         throw GameSearchException(message: GameSearchException.requestError);
-      } else if (e is TypeError || e is FormatException) {
-        throw GameSearchException(message: GameSearchException.wrongParametersError);
       }
       rethrow;
     } finally {
