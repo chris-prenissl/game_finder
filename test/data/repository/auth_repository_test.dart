@@ -92,6 +92,36 @@ void main() {
       }
     });
 
+    test('getOrRequestToken token valid with tolerance returns still valid token', () async {
+      MockClient firstMockClient = MockClient((request) async {
+        final body = {
+          RepositoryConstants.expiresInBodyKey: 10000,
+          RepositoryConstants.accessTokenBodyKey: 'first'
+        };
+        return http.Response(jsonEncode(body), 200);
+      });
+      MockClient secondMockClient = MockClient((request) async {
+        final body = {
+          RepositoryConstants.expiresInBodyKey: 500,
+          RepositoryConstants.accessTokenBodyKey: 'second'
+        };
+        return http.Response(jsonEncode(body), 200);
+      });
+
+      String firstToken = '';
+      String secondToken = '';
+      try {
+        firstToken = await authRepository.getOrRequestToken(firstMockClient);
+        secondToken = await authRepository.getOrRequestToken(secondMockClient);
+      } finally {
+        firstMockClient.close();
+        secondMockClient.close();
+
+        expect(firstToken, 'first');
+        expect(secondToken, 'first');
+      }
+    });
+
     tearDown(() {
       mockClient.close();
     });

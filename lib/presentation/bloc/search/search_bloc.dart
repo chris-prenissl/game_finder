@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:game_finder/data/repository/game_search_repository.dart';
 import 'package:game_finder/presentation/bloc/search/search_ui_state.dart';
