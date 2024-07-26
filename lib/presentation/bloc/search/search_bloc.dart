@@ -42,7 +42,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       try {
         final games = await _gameSearchRepository.searchGames(
-            _uiState.input.trim(), RetryClient(http.Client()));
+          _uiState.input.trim(),
+          RetryClient(http.Client()),
+        );
         _uiState = _uiState.copyWith(foundGames: games);
       } catch (e) {
         if (e is GameFinderException) {

@@ -56,6 +56,10 @@ class AuthRepository {
 
     int? expireSeconds;
     final response = await client.post(url);
+    if (response.statusCode != 200) {
+      throw AuthException(message: AuthException.requestError);
+    }
+
     final decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
     _token = decodedResponse[RepositoryConstants.accessTokenBodyKey];
     expireSeconds = decodedResponse[RepositoryConstants.expiresInBodyKey];

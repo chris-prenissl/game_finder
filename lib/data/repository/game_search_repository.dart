@@ -47,8 +47,14 @@ class GameSearchRepository {
     try {
       final searchResponse =
           await client.post(url, headers: headers, body: searchBody);
+      if (searchResponse.statusCode != 200) {
+        throw GameSearchException(message: GameSearchException.requestError);
+      }
       final searchBodyUtf8 = utf8.decode(searchResponse.bodyBytes);
-      final decodedSearchResponse = jsonDecode(searchBodyUtf8) as List;
+      final decodedSearchResponse = jsonDecode(searchBodyUtf8);
+      if (decodedSearchResponse is! List) {
+        return [];
+      }
 
       final games = decodedSearchResponse
           .whereType<Map<String, dynamic>>()
@@ -65,6 +71,9 @@ class GameSearchRepository {
     } catch (e) {
       if (e is IOException) {
         throw GameSearchException(message: GameSearchException.requestError);
+      }
+      if (e is FormatException) {
+        throw GameSearchException(message: GameSearchException.formatError);
       }
       rethrow;
     } finally {
