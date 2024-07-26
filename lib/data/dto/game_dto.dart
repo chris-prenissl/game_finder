@@ -4,13 +4,16 @@ import '../../domain/model/game.dart';
 extension MapToGameEntity on Map<String, dynamic> {
   Game toGameEntity() {
     if (this case {_idKey: int id, _nameKey: String name}) {
-      final summary = this[_summaryKey];
-      final genres = getMappedListForKeys(_genresKey, _nameKey);
-      final String? coverImgUrl = this[_coverKey]?[_urlKey] as String?;
+      final String? summary = getStringValue(_summaryKey);
+      final List<String> genres = getMappedStringListForKeys(_genresKey, _nameKey);
+
+      final coverImgUrl = getStringMapValue(_coverKey, _urlKey);
       final String? coverImgUrlFormatted = coverImgUrl?.getFormattedImageUrl();
-      final screenShotUrls = getMappedListForKeys(_screenshotsKey, _urlKey);
+
+      final List<String> screenShotUrls = getMappedStringListForKeys(_screenshotsKey, _urlKey);
       final formattedScreenshotUrls =
           screenShotUrls.map((url) => url.getFormattedImageUrl()).toList();
+
       return Game(
           id: id,
           name: name,
