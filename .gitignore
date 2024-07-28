@@ -52,3 +52,6 @@ app.*.map.json
 # hive testing
 **/favorite.lock
 **/favorite.hive
+
+# mocks
+**/*.mocks.dart

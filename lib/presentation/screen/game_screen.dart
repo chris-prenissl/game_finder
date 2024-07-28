@@ -54,10 +54,13 @@ class GameScreen extends StatelessWidget {
                     if (coverUrl != null)
                       Padding(
                         padding: const EdgeInsets.all(Numbers.standardPadding),
-                        child: Image.network(coverUrl,
-                            errorBuilder: (context, obj, stack) => const Text(
-                                  Strings.imageLoadingErrorText,
-                                )),
+                        child: Image.network(
+                          key: _coverImgKey,
+                          coverUrl,
+                          errorBuilder: (context, obj, stack) => const Text(
+                            Strings.imageLoadingErrorText,
+                          ),
+                        ),
                       ),
                     Text(
                       game.summary ?? '',
@@ -91,4 +94,6 @@ class GameScreen extends StatelessWidget {
       },
     );
   }
+
+  static const Key _coverImgKey = Key('coverImg');
 }
