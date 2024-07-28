@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../constants/numbers.dart';
 import '../../constants/strings.dart';
+import '../../domain/model/game.dart';
 import '../bloc/game/game_bloc.dart';
 
 class GameScreen extends StatelessWidget {
@@ -15,6 +16,7 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
+        final bloc = context.read<GameBloc>();
         final game = state.game;
         final coverUrl = game.coverImgUrl;
         return PopScope(
@@ -37,9 +39,13 @@ class GameScreen extends StatelessWidget {
               ),
               actions: [
                 IconButton(
-                  onPressed: () => context
-                      .read<GameBloc>()
-                      .add(const GameEvent.toggleFavorite()),
+                  onPressed: state.when(result: (Game game) {
+                    return () => bloc.add(const GameEvent.toggleFavorite());
+                  }, loading: (_) {
+                    return null;
+                  }, partialAiResponse: (_) {
+                    return null;
+                  }),
                   icon: Icon(
                       game.isFavorite ? Icons.favorite : Icons.favorite_border),
                 )
@@ -85,6 +91,19 @@ class GameScreen extends StatelessWidget {
                             .toList(),
                       ),
                     ),
+                    FilledButton.icon(
+                      onPressed: () =>
+                          bloc.add(const GameEvent.requestAiDescription()),
+                      icon: const Icon(Icons.auto_awesome),
+                      label: const Text(_requestAiDescriptionButtonLabel),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(Numbers.standardPadding),
+                      child: Text(game.aiDescription ?? '',
+                          style:
+                              const TextStyle(fontSize: Numbers.gameSummaryFontSize),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -96,4 +115,5 @@ class GameScreen extends StatelessWidget {
   }
 
   static const Key _coverImgKey = Key('coverImg');
+  static const _requestAiDescriptionButtonLabel = 'Request AI Description';
 }

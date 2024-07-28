@@ -11,5 +11,6 @@ class Game with _$Game {
       required List<String> genres,
       required String? coverImgUrl,
       required List<String> screenShotUrls,
-      required bool isFavorite}) = _Game;
+      required bool isFavorite,
+      String? aiDescription}) = _Game;
 }
