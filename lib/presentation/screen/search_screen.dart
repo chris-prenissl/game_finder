@@ -43,6 +43,17 @@ class SearchScreen extends StatelessWidget {
                               labelText: Strings.searchLabelText,
                               border: const OutlineInputBorder(),
                               errorText: uiState.errorText,
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.camera_alt),
+                                onPressed: () async {
+                                  final String? result = await context.push(
+                                      Routes.base + Routes.aiImageCapture);
+                                  if (result != null) {
+                                    textEditingController.text = result;
+                                    bloc.add(SearchEvent.aiSearch(result));
+                                  }
+                                },
+                              ),
                             ),
                             onChanged: (input) =>
                                 bloc.add(SearchEvent.inputChange(input)),

@@ -26,39 +26,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   SearchBloc(this._gameSearchRepository)
       : super(const _Result(uiState: _initialState)) {
+    on<_AiSearch>((event, emit) async {
+      _uiState = _uiState.copyWith(input: event.gameTitle);
+      await _onSearch(emit);
+    });
     on<_InputChange>((event, emit) {
       _resetErrorText();
       _uiState = _uiState.copyWith(input: event.input);
       emit(_Result(uiState: _uiState));
     });
     on<_Search>((_, emit) async {
-      if (_uiState.input.isEmpty) {
-        _uiState =
-            _uiState.copyWith(errorText: SearchUIState.missingInputError);
-        emit(_Result(uiState: _uiState));
-        return;
-      }
-      _resetErrorText();
-      emit(_Searching(
-        uiState: _uiState,
-      ));
-
-      try {
-        final games = await _gameSearchRepository.searchGames(
-          _uiState.input.trim(),
-          RetryClient(http.Client()),
-        );
-        _uiState = _uiState.copyWith(foundGames: games);
-      } catch (e) {
-        if (e is GameFinderException) {
-          _uiState = _uiState.copyWith(errorText: e.message);
-          emit(_Result(uiState: _uiState));
-        } else {
-          rethrow;
-        }
-      }
-
-      emit(_Result(uiState: _uiState));
+      await _onSearch(emit);
     });
     on<_SetFavorite>((event, emit) async {
       List<Game> foundGames = [..._uiState.foundGames];
@@ -73,6 +51,36 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       _uiState = _uiState.copyWith(foundGames: foundGames);
       emit(_Result(uiState: _uiState));
     });
+  }
+
+  Future<void> _onSearch(Emitter<SearchState> emit) async {
+    if (_uiState.input.isEmpty) {
+      _uiState =
+          _uiState.copyWith(errorText: SearchUIState.missingInputError);
+      emit(_Result(uiState: _uiState));
+      return;
+    }
+    _resetErrorText();
+    emit(_Searching(
+      uiState: _uiState,
+    ));
+
+    try {
+      final games = await _gameSearchRepository.searchGames(
+        _uiState.input.trim(),
+        RetryClient(http.Client()),
+      );
+      _uiState = _uiState.copyWith(foundGames: games);
+    } catch (e) {
+      if (e is GameFinderException) {
+        _uiState = _uiState.copyWith(errorText: e.message);
+        emit(_Result(uiState: _uiState));
+      } else {
+        rethrow;
+      }
+    }
+
+    emit(_Result(uiState: _uiState));
   }
 
   void _resetErrorText() {
