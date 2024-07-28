@@ -47,5 +47,9 @@ void main() {
         GameState.baseState(game.copyWith(isFavorite: false))
       ],
     );
+
+    tearDown(() {
+      Hive.deleteFromDisk();
+    });
   });
 }
