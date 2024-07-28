@@ -5,14 +5,18 @@ import 'package:game_finder/constants/numbers.dart';
 import 'package:game_finder/data/repository/auth_repository.dart';
 import 'package:game_finder/data/repository/favorite_repository.dart';
 import 'package:game_finder/data/repository/game_search_repository.dart';
+import 'package:game_finder/data/repository/gemini_ai_repository.dart';
+import 'package:game_finder/data/repository/repository_constants.dart';
 import 'package:game_finder/presentation/bloc/search/search_bloc.dart';
 import 'package:game_finder/presentation/router.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'constants/colors.dart';
 import 'constants/strings.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: Strings.dotEnvFileName);
   await Hive.initFlutter();
   runApp(const App());
@@ -25,6 +29,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final clientId = dotenv.env[Strings.clientIdDotEnvKey];
     final clientSecret = dotenv.env[Strings.clientSecretDotEnvKey];
+    final geminiApiKey = dotenv.env[Strings.geminiApiDotEnvKey];
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthRepository>(
@@ -37,6 +42,11 @@ class App extends StatelessWidget {
         RepositoryProvider(
           create: (context) => FavoriteRepository(),
         ),
+        RepositoryProvider(create: (context) {
+          final geminiModel = GenerativeModel(
+              model: RepositoryConstants.geminiModel, apiKey: geminiApiKey!);
+          return GeminiAiRepository(generativeModel: geminiModel);
+        })
       ],
       child: RepositoryProvider<GameSearchRepository>(
         create: (context) => GameSearchRepository(

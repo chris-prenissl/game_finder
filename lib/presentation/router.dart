@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_finder/data/repository/favorite_repository.dart';
+import 'package:game_finder/data/repository/gemini_ai_repository.dart';
+import 'package:game_finder/presentation/bloc/game_image_ai_capture/game_image_ai_capture_bloc.dart';
+import 'package:game_finder/presentation/screen/game_image_ai_capture_screen.dart';
 import 'package:game_finder/presentation/screen/game_screen.dart';
 import 'package:game_finder/presentation/screen/search_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +30,15 @@ final GoRouter router = GoRouter(
             );
           },
         ),
+        GoRoute(
+            path: Routes.aiImageCapture,
+            builder: (BuildContext context, GoRouterState state) {
+              return BlocProvider(
+                create: (context) =>
+                    GameImageAiCaptureBloc(context.read<GeminiAiRepository>()),
+                child: const GameImageAiCaptureScreen(),
+              );
+            })
       ],
     ),
   ],
@@ -35,4 +47,5 @@ final GoRouter router = GoRouter(
 class Routes {
   static const String base = '/';
   static const String gamePath = 'game';
+  static const String aiImageCapture = 'ai_image_capture';
 }
