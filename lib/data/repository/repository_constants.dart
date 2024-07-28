@@ -13,4 +13,6 @@ class RepositoryConstants {
   static const String nameBodyKey = 'name';
 
   static const String bearer = 'Bearer';
+
+  static const geminiModel = 'gemini-1.5-flash';
 }

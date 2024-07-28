@@ -1,8 +1,7 @@
-part of 'game_image_capture_bloc.dart';
+part of 'game_image_ai_capture_bloc.dart';
 
 @freezed
-class GameImageCaptureEvent with _$GameImageCaptureEvent {
-  const factory GameImageCaptureEvent.cameraFind() = _CameraFind;
-  const factory GameImageCaptureEvent.imageCapture(Uint8List image) = _ImageCapture;
-  const factory GameImageCaptureEvent.cancel() = _Cancel;
+class GameImageAiCaptureEvent with _$GameImageAiCaptureEvent {
+  const factory GameImageAiCaptureEvent.cameraSearch() = _CameraSearch;
+  const factory GameImageAiCaptureEvent.imageCapture(Uint8List image) = _ImageCapture;
 }
