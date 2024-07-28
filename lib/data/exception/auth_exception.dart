@@ -5,5 +5,4 @@ class AuthException extends GameFinderException {
 
   static const String requestError = 'Authentication: request error';
   static const String missingParameterMessage = 'Authentication: Missing Parameter';
-
 }
