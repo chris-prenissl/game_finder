@@ -9,9 +9,9 @@ class GeminiAiRepository {
       : _generativeModel = generativeModel;
 
   Future<String> getGameNameByImage(Uint8List image) async {
-    final descriptionPrompt = TextPart('Here is a image from a game');
-    final imagePart = DataPart('image/jpeg', image);
-    final actionPrompt = TextPart('Respond with only the name of this game');
+    final descriptionPrompt = TextPart(_imageDescriptionPromptText);
+    final imagePart = DataPart(_imageMimeType, image);
+    final actionPrompt = TextPart(_getNameActionPrompt);
 
     final result = await _generativeModel.generateContent([
       Content.multi([descriptionPrompt, imagePart, actionPrompt]),
@@ -19,4 +19,8 @@ class GeminiAiRepository {
 
     return result.text ?? '';
   }
+
+  static const _imageDescriptionPromptText = 'Here is a image from a game';
+  static const _imageMimeType = 'image/jpeg';
+  static const _getNameActionPrompt = 'Give just the name of this game [only the name]';
 }
