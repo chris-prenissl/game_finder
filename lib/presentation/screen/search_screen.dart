@@ -15,20 +15,24 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(Strings.appTitle),
-      ),
-      body: BlocBuilder<SearchBloc, SearchState>(
-        builder: (context, state) {
-          textEditingController.text = state.uiState.input;
-          return state.when(
-            searching: (_) => const Center(
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        textEditingController.text = state.uiState.input;
+        final appBar = AppBar(
+          title: const Text(Strings.appTitle),
+        );
+        return state.when(
+          searching: (_) => Scaffold(
+            appBar: appBar,
+            body: const Center(
               child: CircularProgressIndicator(),
             ),
-            result: (uiState) {
-              final bloc = context.read<SearchBloc>();
-              return Column(
+          ),
+          result: (uiState) {
+            final bloc = context.read<SearchBloc>();
+            return Scaffold(
+              appBar: appBar,
+              body: Column(
                 children: [
                   Row(
                     children: [
@@ -43,17 +47,6 @@ class SearchScreen extends StatelessWidget {
                               labelText: Strings.searchLabelText,
                               border: const OutlineInputBorder(),
                               errorText: uiState.errorText,
-                              suffixIcon: IconButton(
-                                icon: const Icon(Icons.camera_alt),
-                                onPressed: () async {
-                                  final String? result = await context.push(
-                                      Routes.base + Routes.aiImageCapture);
-                                  if (result != null) {
-                                    textEditingController.text = result;
-                                    bloc.add(SearchEvent.aiSearch(result));
-                                  }
-                                },
-                              ),
                             ),
                             onChanged: (input) =>
                                 bloc.add(SearchEvent.inputChange(input)),
@@ -93,11 +86,30 @@ class SearchScreen extends StatelessWidget {
                     ),
                   )
                 ],
-              );
-            },
-          );
-        },
-      ),
+              ),
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: FloatingActionButton.extended(
+                onPressed: () async {
+                  final String? result =
+                      await context.push(Routes.base + Routes.aiImageCapture);
+                  if (result != null) {
+                    textEditingController.text = result;
+                    bloc.add(SearchEvent.aiSearch(result));
+                  }
+                },
+                label: const Text(Strings.aiSearchButtonLabel),
+                icon: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.camera_alt_outlined),
+                    Icon(Icons.auto_awesome),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
