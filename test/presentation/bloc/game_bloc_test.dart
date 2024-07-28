@@ -27,11 +27,25 @@ void main() {
       favoriteRepository = FavoriteRepository();
     });
 
+    test('initial state', () {
+      final gameBloc = GameBloc(game, favoriteRepository);
+      final result = gameBloc.state;
+
+      expect(result.game, equals(game));
+    });
+
     blocTest(
       'toggleFavorite, first call returns game with favorite true',
       build: () => GameBloc(game, favoriteRepository),
-      act: (bloc) => bloc.add(const GameEvent.toggleFavorite()),
-      expect: () => [],
+      act: (bloc) {
+        bloc.add(const GameEvent.toggleFavorite());
+        bloc.add(const GameEvent.toggleFavorite());
+      },
+      wait: const Duration(milliseconds: 400),
+      expect: () => [
+        GameState.baseState(game.copyWith(isFavorite: true)),
+        GameState.baseState(game.copyWith(isFavorite: false))
+      ],
     );
   });
 }
