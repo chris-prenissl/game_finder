@@ -96,9 +96,9 @@ void main() {
       }
     });
 
-    tearDown(() {
+    tearDown(() async {
       mockClient.close();
-      Hive.deleteFromDisk();
+      await Hive.deleteFromDisk();
     });
   });
 }

@@ -48,8 +48,8 @@ void main() {
       ],
     );
 
-    tearDown(() {
-      Hive.deleteFromDisk();
+    tearDown(() async {
+      await Hive.deleteFromDisk();
     });
   });
 }

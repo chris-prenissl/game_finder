@@ -16,6 +16,8 @@ void main() {
       final result = await favoriteRepository.isFavorite(1234);
 
       expect(result, equals(false));
+
+      await Hive.deleteFromDisk();
     });
 
     test('toggleGameFavorite, first call return true', () async {
@@ -24,6 +26,8 @@ void main() {
       final result = await favoriteRepository.isFavorite(1234);
 
       expect(result, equals(true));
+
+      await Hive.deleteFromDisk();
     });
 
     test('toggleGameFavorite, second call return false', () async {
@@ -33,10 +37,12 @@ void main() {
       final result = await favoriteRepository.isFavorite(1234);
 
       expect(result, equals(false));
+
+      await Hive.deleteFromDisk();
     });
 
-    tearDown(() {
-      Hive.deleteFromDisk();
+    tearDown(() async {
+      await Hive.deleteFromDisk();
     });
   });
 }
