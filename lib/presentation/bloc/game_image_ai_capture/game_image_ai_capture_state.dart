@@ -1,9 +1,9 @@
-part of 'game_image_capture_bloc.dart';
+part of 'game_image_ai_capture_bloc.dart';
 
 @freezed
-class GameImageCaptureState with _$GameImageCaptureState {
-  const factory GameImageCaptureState.initial() = _Initial;
-  const factory GameImageCaptureState.initialized() = _Initialized;
-  const factory GameImageCaptureState.aiResult() = _AiResult;
-  const factory GameImageCaptureState.error(String message) = _Error;
+class GameImageAiCaptureState with _$GameImageAiCaptureState {
+  const factory GameImageAiCaptureState.initialized(CameraDescription camera) = _Initialized;
+  const factory GameImageAiCaptureState.aiResult(String gameTitle) = _AiResult;
+  const factory GameImageAiCaptureState.loading() = _Loading;
+  const factory GameImageAiCaptureState.error(String message) = _Error;
 }
