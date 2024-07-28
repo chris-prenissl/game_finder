@@ -1,9 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_finder/presentation/bloc/game_image_ai_capture/game_image_ai_capture_bloc.dart';
-
-import '../../constants/strings.dart';
+import 'package:go_router/go_router.dart';
 
 class GameImageAiCaptureScreen extends StatefulWidget {
   const GameImageAiCaptureScreen({super.key});
@@ -14,7 +15,7 @@ class GameImageAiCaptureScreen extends StatefulWidget {
 }
 
 class _GameImageAiCaptureScreenState extends State<GameImageAiCaptureScreen> {
-  late CameraController _controller;
+  CameraController? _controller;
 
   @override
   void initState() {
@@ -26,9 +27,10 @@ class _GameImageAiCaptureScreenState extends State<GameImageAiCaptureScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<GameImageAiCaptureBloc>();
     return Scaffold(
         appBar: AppBar(
-          title: const Text(Strings.appTitle),
+          title: const Text('Capture game content to search for the game'),
         ),
         body: BlocConsumer<GameImageAiCaptureBloc, GameImageAiCaptureState>(
           listener: (context, state) {
@@ -36,7 +38,7 @@ class _GameImageAiCaptureScreenState extends State<GameImageAiCaptureScreen> {
               loading: () {},
               initialized: (camera) {
                 _controller = CameraController(camera, ResolutionPreset.medium);
-                _controller.initialize().then((_) {
+                _controller!.initialize().then((_) {
                   if (!mounted) {
                     return;
                   }
@@ -45,47 +47,66 @@ class _GameImageAiCaptureScreenState extends State<GameImageAiCaptureScreen> {
                   if (e is CameraException) {
                     switch (e.code) {
                       case _cameraAccessDeniedErrorCode:
-                        // Handle access errors here.
+                      // Handle access errors here.
                         break;
                       default:
-                        // Handle other errors here.
+                      // Handle other errors here.
                         break;
                     }
                   }
                 });
               },
-              aiResult: (gameTitle) {},
+              aiResult: (gameTitle) {
+                context.pop(gameTitle);
+              },
               error: (_) {},
             );
           },
           builder: (context, state) {
-            state.when(
-              initialized: (camera) => CameraPreview(
-                CameraController(camera, ResolutionPreset.medium),
-              ),
-              aiResult: (_) => {},
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              error: (message) => Scaffold(
-                body: Center(
-                  child: Text(
-                    message,
-                    style: const TextStyle(color: Colors.red),
-                  ),
+            return state.when(
+                initialized: (_) =>
+                    Center(
+                      child: _controller != null
+                          ? CameraPreview(_controller!)
+                          : const CircularProgressIndicator(),
+                    ),
+                aiResult: (_) =>
+                const Center(
+                  child: CircularProgressIndicator(),
                 ),
-                floatingActionButton:
-                    FloatingActionButton(onPressed: () => context.read),
-              ),
+                loading: () =>
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                error: (message) =>
+                    Center(
+                      child: Text(
+                        message,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    )
             );
-            return const CircularProgressIndicator();
           },
-        ));
+        ),
+        floatingActionButton: _controller != null ? FloatingActionButton(
+          onPressed: () async {
+            final image = await _captureImage();
+            bloc.add(GameImageAiCaptureEvent.imageCapture(image));
+          },
+          child: const Icon(Icons.camera_alt),
+        ) : null
+    );
+  }
+
+  Future<Uint8List> _captureImage() async {
+    final image = await _controller!.takePicture();
+    final imageBytes = await image.readAsBytes();
+    return imageBytes;
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
