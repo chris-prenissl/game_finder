@@ -9,7 +9,6 @@ class SearchUIState with _$SearchUIState {
     required String input,
     required List<Game> foundGames,
     String? errorText,
-    Game? selectedGame,
   }) = _SearchUIState;
 
   static const String missingInputError = 'Missing Input';

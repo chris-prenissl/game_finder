@@ -15,8 +15,11 @@ part 'search_state.dart';
 part 'search_bloc.freezed.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  static const SearchUIState _initialState =
-      SearchUIState(input: '', foundGames: [], errorText: null);
+  static const SearchUIState _initialState = SearchUIState(
+    input: '',
+    foundGames: [],
+    errorText: null,
+  );
   SearchUIState _uiState = _initialState;
 
   final GameSearchRepository _gameSearchRepository;
