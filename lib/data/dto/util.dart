@@ -20,10 +20,11 @@ extension MapParsing on Map<String, dynamic> {
     if (value == null || value is! Iterable) {
       return [];
     }
-    return value
-        .whereType<Map<String, String>>()
-        .map((Map<String, String> e) => e[mappedListKey])
-        .whereType<String>().toList();
+    final onlyMapType = value.whereType<Map<String, dynamic>>();
+    final iterable = onlyMapType.map(( e) => e[mappedListKey]);
+    final onlyStringIterable = iterable.whereType<String>();
+    final stringList = onlyStringIterable.toList();
+    return stringList;
   }
 }
 
