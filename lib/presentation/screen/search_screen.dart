@@ -47,6 +47,14 @@ class SearchScreen extends StatelessWidget {
                               labelText: Strings.searchLabelText,
                               border: const OutlineInputBorder(),
                               errorText: uiState.errorText,
+                              suffixIcon: uiState.input.isNotEmpty
+                                  ? IconButton(
+                                      onPressed: () => bloc.add(
+                                        const SearchEvent.inputChange(''),
+                                      ),
+                                      icon: const Icon(Icons.cancel),
+                                    )
+                                  : null,
                             ),
                             onChanged: (input) =>
                                 bloc.add(SearchEvent.inputChange(input)),
@@ -87,7 +95,8 @@ class SearchScreen extends StatelessWidget {
                   )
                 ],
               ),
-              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
               floatingActionButton: FloatingActionButton.extended(
                 onPressed: () async {
                   final String? result =
