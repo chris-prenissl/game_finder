@@ -3,38 +3,42 @@
 ## Overview
 
 _Game Finder_ is a flutter application for iOS and Android that lets you search the IGDB library
-and mark your favorites.
+by capturing an image that is analyzed by gemini pro model. If you want additional descriptions 
+you can let the AI describe to the game.
+
+![Game Finder](screenshots/game_finder_clip.gif)
 
 ## Technologies
 
-_Flutter_ | _Dart_ | _bloc_ | _http_ | _hive_ | _go_router_
+_Flutter_ | _Dart_ | _gemini ai_ | _bloc_ | _http_ | _hive_ | _go_router_
 
 ## Images
 
-![Game Finder Screen 1](screenshots/search.png) ![Casual Chess Screen 2](screenshots/game.png)
+![Game Finder Screen 1](screenshots/search.png) ![Casual Chess Screen 2](screenshots/ai_description.png)
 
 ## Usage
 
 ### Prerequisites
 
-- Flutter SDK
-- Installed iOS or Android Emulator
+- Twitch account with a app project (see: https://api-docs.igdb.com/#getting-started)
+- Gemini API key (see: https://ai.google.dev/gemini-api/docs/api-key)
+- Flutter (see: https://docs.flutter.dev/get-started/install)
 
 ### Installation
 
-1. Use your twitch account to create a new app project (see: https://api-docs.igdb.com/#getting-started)
-2. Clone this repository:
+1. Clone this repository:
    ```bash
    git clone https://github.com/chris-prenissl/game_finder.git
    ```
-3. Create a .env file in the project's root with the following secrets from IGDB
+2. Create a .env file in the project's root with the following secrets from IGDB
    ```bash
-   CLIENT_ID=client_id
-   CLIENT_SECRET=client_secret
+   CLIENT_ID="client_id"
+   CLIENT_SECRET="client_secret"
+   GEMINI_API_KEY="gemini_api_key"
    ```
-4. Start a emulator
+3. Start a iOS or Android device
 
-5. Open the Terminal inside the project folder:
+4. Open the Terminal inside the project folder:
    ```bash
    flutter run
    ```
