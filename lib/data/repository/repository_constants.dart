@@ -14,5 +14,5 @@ class RepositoryConstants {
 
   static const String bearer = 'Bearer';
 
-  static const geminiModel = 'gemini-1.5-flash';
+  static const geminiModel = 'gemini-1.5-pro';
 }
