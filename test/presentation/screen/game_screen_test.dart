@@ -32,7 +32,7 @@ void main() {
         BlocProvider<GameBloc>(
           create: (BuildContext context) {
             final mockBloc = MockGameBloc();
-            when(mockBloc.state).thenReturn(GameState.baseState(game));
+            when(mockBloc.state).thenReturn(GameState.result(game));
             return mockBloc;
           },
           child: const MaterialApp(

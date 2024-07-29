@@ -3,14 +3,20 @@ import 'dart:io';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:game_finder/data/repository/favorite_repository.dart';
+import 'package:game_finder/data/repository/gemini_ai_repository.dart';
 import 'package:game_finder/domain/model/game.dart';
 import 'package:game_finder/presentation/bloc/game/game_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:mockito/annotations.dart';
 
+import 'game_bloc_test.mocks.dart';
+
+@GenerateNiceMocks([MockSpec<GeminiAiRepository>()])
 void main() {
   group('GameBloc', () {
     late Game game;
     late FavoriteRepository favoriteRepository;
+    late MockGeminiAiRepository mockGeminiAiRepository;
 
     setUp(() {
       Hive.init(
@@ -25,10 +31,12 @@ void main() {
         isFavorite: false,
       );
       favoriteRepository = FavoriteRepository();
+      mockGeminiAiRepository = MockGeminiAiRepository();
     });
 
     test('initial state', () {
-      final gameBloc = GameBloc(game, favoriteRepository);
+      final gameBloc =
+          GameBloc(game, favoriteRepository, mockGeminiAiRepository);
       final result = gameBloc.state;
 
       expect(result.game, equals(game));
@@ -36,15 +44,15 @@ void main() {
 
     blocTest(
       'toggleFavorite, first call returns game with favorite true',
-      build: () => GameBloc(game, favoriteRepository),
+      build: () => GameBloc(game, favoriteRepository, mockGeminiAiRepository),
       act: (bloc) {
         bloc.add(const GameEvent.toggleFavorite());
         bloc.add(const GameEvent.toggleFavorite());
       },
       wait: const Duration(milliseconds: 400),
       expect: () => [
-        GameState.baseState(game.copyWith(isFavorite: true)),
-        GameState.baseState(game.copyWith(isFavorite: false))
+        GameState.result(game.copyWith(isFavorite: true)),
+        GameState.result(game.copyWith(isFavorite: false))
       ],
     );
 
