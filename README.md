@@ -1,12 +1,14 @@
+<img src="assets/icon/app_icon.jpeg" alt="iOS Screenshot" width="64"/>
+
 # Game Finder
 
 ## Overview
 
 _Game Finder_ is a flutter application for iOS and Android that lets you search the IGDB library
-by capturing an image that is analyzed by gemini pro model. If you want additional descriptions 
+by capturing an image that is analyzed by gemini pro model. If you want additional descriptions
 you can let the AI describe to the game.
 
-![Game Finder](screenshots/game_finder_clip.gif)
+<img src="screenshots/game_finder_clip.gif" alt="Game Finder clip" height="400" width="182"/>
 
 ## Technologies
 
@@ -14,7 +16,8 @@ _Flutter_ | _Dart_ | _gemini ai_ | _bloc_ | _http_ | _hive_ | _go_router_
 
 ## Images
 
-![Game Finder Screen 1](screenshots/search.png) ![Casual Chess Screen 2](screenshots/ai_description.png)
+<img src="screenshots/search.png" alt="Search Screen" height="400"/>
+<img src="screenshots/ai_description.png" alt="AI Description" height="400"/>
 
 ## Usage
 
