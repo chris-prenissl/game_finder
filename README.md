@@ -16,8 +16,10 @@ _Flutter_ | _Dart_ | _gemini ai_ | _bloc_ | _http_ | _hive_ | _go_router_
 
 ## Images
 
-<img src="screenshots/search.png" alt="Search Screen" height="400"/>
-<img src="screenshots/ai_description.png" alt="AI Description" height="400"/>
+<div style="display: flex;">
+   <img src="screenshots/search.png" alt="Search Screen" height="400"/>
+   <img src="screenshots/ai_description.png" alt="AI Description" height="400"/>
+</div>
 
 ## Usage
 
