@@ -13,7 +13,7 @@ void main() async {
     final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey);
     final geminiRepository = GeminiAiRepository(generativeModel: model);
 
-    final image = await File('screenshots/game.png').readAsBytes();
+    final image = await File('screenshots/search.png').readAsBytes();
     final result = await geminiRepository.getGameNameByImage(image);
 
     expect(result, isNotEmpty);
