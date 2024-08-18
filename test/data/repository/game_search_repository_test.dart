@@ -20,7 +20,8 @@ void main() {
     late MockClient mockClient;
 
     setUp(() async {
-      Hive.init('${Directory.current.path}/test/data/repository/hive_game_search_test');
+      Hive.init(
+          '${Directory.current.path}/test/data/repository/hive_game_search_test');
       favoriteRepository = FavoriteRepository();
       authRepository = AuthRepository(
           clientId: 'clientId',
@@ -33,14 +34,14 @@ void main() {
     });
 
     test(
-        'getOrRequestToken authenticated, valid auth response and gameSearch no response body, creates exception',
+        'getOrRequestToken authenticated, valid auth response and gameSearch no response body, throws GameSearchException format exception',
         () async {
       mockClient = MockClient((request) async {
         if (request.url.path == '/oauth2/token') {
           return _getValidAuthResponse();
         }
         if (request.url.path == '/v4/games') {
-          return _getInValidResponse();
+          return _getInvalidJSONResponse();
         }
         return http.Response('', 500);
       });
@@ -49,13 +50,16 @@ void main() {
         result = await gameSearchRepository.searchGames('Game', mockClient);
       } catch (e) {
         expect(e, isA<GameSearchException>());
+        final gameSearchException = e as GameSearchException;
+        expect(gameSearchException.message,
+            equals(GameSearchException.formatError));
       } finally {
         expect(result, isEmpty);
       }
     });
 
     test(
-        'getOrRequestToken authenticated, valid auth response and valid gameSearch body, creates exception',
+        'getOrRequestToken authenticated, valid auth response and valid gameSearch body, returns valid Game',
         () async {
       mockClient = MockClient((request) async {
         if (request.url.path == '/oauth2/token') {
@@ -74,7 +78,7 @@ void main() {
     });
 
     test(
-        'getOrRequestToken authenticated, valid auth response and 404 error gameSearch body, creates exception',
+        'getOrRequestToken authenticated, valid auth response and 404 error gameSearch body, throws GameSearchException request',
         () async {
       mockClient = MockClient((request) async {
         if (request.url.path == '/oauth2/token') {
@@ -91,6 +95,35 @@ void main() {
         result = await gameSearchRepository.searchGames('Game', mockClient);
       } catch (e) {
         expect(e, isA<GameSearchException>());
+        final gameSearchException = e as GameSearchException;
+        expect(gameSearchException.message,
+            equals(GameSearchException.requestError));
+      } finally {
+        expect(result, isEmpty);
+      }
+    });
+
+    test(
+        'getOrRequestToken authenticated, valid auth response and noList response, throws format exception',
+        () async {
+      mockClient = MockClient((request) async {
+        if (request.url.path == '/oauth2/token') {
+          return _getValidAuthResponse();
+        }
+        if (request.url.path == '/v4/games') {
+          return _getNoListResponse();
+        }
+        return http.Response('', 400);
+      });
+
+      List<Game> result = [];
+      try {
+        result = await gameSearchRepository.searchGames('Game', mockClient);
+      } catch (e) {
+        expect(e, isA<GameSearchException>());
+        final gameSearchException = e as GameSearchException;
+        expect(gameSearchException.message,
+            equals(GameSearchException.formatError));
       } finally {
         expect(result, isEmpty);
       }
@@ -108,8 +141,12 @@ Future<Response> _getValidAuthResponse() async {
       jsonEncode({'access_token': 'token', 'expires_in': 40000}), 200);
 }
 
-Future<Response> _getInValidResponse() async {
+Future<Response> _getInvalidJSONResponse() async {
   return http.Response('', 200);
+}
+
+Future<Response> _getNoListResponse() async {
+  return http.Response(jsonEncode({}), 200);
 }
 
 Future<Response> _getValidGamesResponse() async {

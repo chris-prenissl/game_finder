@@ -53,7 +53,7 @@ class GameSearchRepository {
       final searchBodyUtf8 = utf8.decode(searchResponse.bodyBytes);
       final decodedSearchResponse = jsonDecode(searchBodyUtf8);
       if (decodedSearchResponse is! List) {
-        return [];
+        throw const FormatException();
       }
 
       final games = decodedSearchResponse

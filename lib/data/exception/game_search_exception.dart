@@ -4,5 +4,5 @@ class GameSearchException extends GameFinderException {
   GameSearchException({required super.message});
 
   static const String requestError = 'GameSearch: Request error';
-  static const String formatError = 'Game Search: Response could not be ';
+  static const String formatError = 'Game Search: Wrong format';
 }
