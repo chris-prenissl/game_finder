@@ -8,10 +8,11 @@ import 'package:game_finder/domain/model/game.dart';
 import 'package:game_finder/presentation/bloc/game/game_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 import 'game_bloc_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<GeminiAiRepository>()])
+@GenerateNiceMocks([MockSpec<FavoriteRepository>(), MockSpec<GeminiAiRepository>()])
 void main() {
   group('GameBloc', () {
     late Game game;
@@ -56,6 +57,23 @@ void main() {
       ],
     );
 
+    blocTest(
+      'requestAiDescription',
+      build: () {
+        when(mockGeminiAiRepository.getDescriptionOfGame(any))
+            .thenAnswer((_) => Stream.fromIterable(['A', 'Game']));
+        return GameBloc(game, MockFavoriteRepository(), mockGeminiAiRepository);
+      },
+      act: (bloc) {
+        bloc.add(const GameEvent.requestAiDescription());
+      },
+      expect: () => [
+        GameState.loading(game),
+        GameState.partialAiResponse(game.copyWith(aiDescription: 'A')),
+        GameState.partialAiResponse(game.copyWith(aiDescription: 'AGame')),
+        GameState.result(game.copyWith(aiDescription: 'AGame'))
+      ]
+    );
     tearDown(() async {
       await Hive.deleteFromDisk();
     });
