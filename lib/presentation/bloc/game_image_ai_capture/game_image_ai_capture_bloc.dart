@@ -16,12 +16,13 @@ part 'game_image_ai_capture_bloc.freezed.dart';
 class GameImageAiCaptureBloc
     extends Bloc<GameImageAiCaptureEvent, GameImageAiCaptureState> {
   final GeminiAiRepository _aiRepository;
+  final Future<List<CameraDescription>> Function() _getCameras;
 
-  GameImageAiCaptureBloc(this._aiRepository)
+  GameImageAiCaptureBloc(this._aiRepository, this._getCameras)
       : super(const GameImageAiCaptureState.loading()) {
     on<_CameraSearch>((event, emit) async {
       try {
-        final cameras = await availableCameras();
+        final cameras = await _getCameras();
         emit(GameImageAiCaptureState.initialized(cameras.first));
       } catch (e) {
         if (e is CameraException) {

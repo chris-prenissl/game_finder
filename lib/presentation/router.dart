@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_finder/data/repository/favorite_repository.dart';
@@ -37,8 +38,8 @@ final GoRouter router = GoRouter(
             path: Routes.aiImageCapture,
             builder: (BuildContext context, GoRouterState state) {
               return BlocProvider(
-                create: (context) =>
-                    GameImageAiCaptureBloc(context.read<GeminiAiRepository>()),
+                create: (context) => GameImageAiCaptureBloc(
+                    context.read<GeminiAiRepository>(), availableCameras),
                 child: const GameImageAiCaptureScreen(),
               );
             })
