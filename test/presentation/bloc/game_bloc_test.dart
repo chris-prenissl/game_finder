@@ -21,7 +21,7 @@ void main() {
 
     setUp(() {
       Hive.init(
-          '${Directory.current.path}/test/presentation/bloc/hive_game_bloc');
+          '${Directory.current.path}/test/presentation/bloc');
       game = const Game(
         id: 1234,
         name: 'Game',

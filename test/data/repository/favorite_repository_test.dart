@@ -9,7 +9,7 @@ void main() {
     late FavoriteRepository favoriteRepository = FavoriteRepository();
 
     setUp(() {
-      Hive.init('${Directory.current.path}/test/data/repository/hive_favorite_test');
+      Hive.init('${Directory.current.path}/test/data/repository');
     });
 
     test('isFavorite, return initial false', () async {

@@ -21,7 +21,7 @@ void main() {
 
     setUp(() async {
       Hive.init(
-          '${Directory.current.path}/test/data/repository/hive_game_search_test');
+          '${Directory.current.path}/test/data/repository');
       favoriteRepository = FavoriteRepository();
       authRepository = AuthRepository(
           clientId: 'clientId',
