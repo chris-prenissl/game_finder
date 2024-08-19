@@ -28,28 +28,30 @@ class _GameImageAiCaptureScreenState extends State<GameImageAiCaptureScreen> {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<GameImageAiCaptureBloc>();
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     return BlocConsumer<GameImageAiCaptureBloc, GameImageAiCaptureState>(
       listener: (context, state) {
         state.when(
           loading: () {},
           initialized: (camera) {
-            _controller = CameraController(camera, ResolutionPreset.medium);
+            _controller = CameraController(camera, enableAudio: false, ResolutionPreset.medium);
             _controller!.initialize().then((_) {
               if (!mounted) {
                 return;
               }
               setState(() {});
             }).catchError((Object e) {
+              String errorText;
               if (e is CameraException) {
-                switch (e.code) {
-                  case _cameraAccessDeniedErrorCode:
-                    // Handle access errors here.
-                    break;
-                  default:
-                    // Handle other errors here.
-                    break;
-                }
+                errorText = e.description ?? _undefinedCameraErrorText;
+              } else {
+                errorText = _undefinedCameraErrorText;
               }
+              scaffoldMessenger.showSnackBar(
+                SnackBar(
+                  content: Text(errorText),
+                ),
+              );
             });
           },
           aiResult: (gameTitle) {
@@ -113,5 +115,5 @@ class _GameImageAiCaptureScreenState extends State<GameImageAiCaptureScreen> {
   }
 
   static const _gameSearchTitle = 'Search with Image';
-  static const _cameraAccessDeniedErrorCode = 'CameraAccessDenied';
+  static const _undefinedCameraErrorText = 'Undefined Camera access error occurred';
 }
