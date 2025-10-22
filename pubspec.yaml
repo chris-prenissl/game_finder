@@ -1,8 +1,7 @@
 name: game_finder
-description: "Game Finder is a flutter application for iOS and Android that lets you search the IGDB library
-and mark your favorites."
+description: "Game Finder is a flutter application for iOS and Android that lets you search the IGDB library and mark your favorites."
 
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -30,7 +29,7 @@ dev_dependencies:
 
   flutter_lints: ^5.0.0
   build_runner: ^2.4.13
-  freezed: ^2.5.7
+  freezed: ^2.5.2
   mockito: ^5.4.4
   hive_generator: ^2.0.1
   bloc_test: ^9.1.7

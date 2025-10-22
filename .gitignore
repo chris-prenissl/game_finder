@@ -41,8 +41,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-
+/android/**/.cxx
 # code generation
 *.freezed.dart
 
@@ -58,3 +57,6 @@ app.*.map.json
 
 # coverage
 /coverage
+
+# FVM Version Cache
+.fvm/
